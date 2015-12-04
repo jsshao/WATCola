@@ -1,0 +1,12 @@
+#ifndef GROUPOFF_H
+#define GROUPOFF_H
+
+_Task Groupoff {
+    void main();
+  public:
+    Groupoff( unsigned int numStudents, unsigned int sodaCost, unsigned int groupoffDelay );
+    WATCard::FWATCard giftCard();
+};
+
+#endif
+// vim: set filetype=ucpp :

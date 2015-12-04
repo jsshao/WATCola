@@ -20,7 +20,7 @@ uint32_t convertStringToInt(char *str, int min) {
 
     result = stoi(str, &processed_char);
     if (processed_char != strlen(str) || result < min)
-        throw invalid_argument("Not an integer or value too large");
+        throw invalid_argument("Not an integer or value too small");
 
     return result;
 }
@@ -45,4 +45,10 @@ void uMain::main() {
     }
 
     rng.seed(seed);
+    ConfigParms cparms;
+
+    processConfigFile(config_file.c_str(), cparms);
+
+    
 }
+// vim: set filetype=ucpp :

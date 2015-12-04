@@ -1,8 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <limits>					// numeric_limits
-using namespace std;
 #include "config.h"
+
+using namespace std;
 
 static bool comments( ifstream &in, string &name ) {
     for ( ;; ) {
@@ -76,3 +77,5 @@ void processConfigFile( const char *configFile, ConfigParms &cparms ) {
 // Local Variables: //
 // compile-command: "make" //
 // End: //
+
+// vim: set filetype=ucpp :
