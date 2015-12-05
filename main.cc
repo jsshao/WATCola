@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "config.h"
+#include "printer.h"
 #include "MPRNG.h"
 using namespace std;
 
@@ -46,8 +47,15 @@ void uMain::main() {
 
     rng.seed(seed);
     ConfigParms cparms;
-
     processConfigFile(config_file.c_str(), cparms);
+    Printer printer(cparms.numStudents, cparms.numVendingMachines, cparms.numCouriers);
+    printer.print(Printer::Parent, TableCell::Start); 
+    printer.print(Printer::Groupoff, TableCell::TransferDone, 69); 
+    printer.print(Printer::Student, 1, TableCell::LostCard); 
+    printer.print(Printer::Courier, 0, TableCell::LostCard, 25, 99); 
+    printer.print(Printer::Courier, 0, TableCell::BoughtSoda, 25); 
+    printer.print(Printer::Parent, TableCell::Finish); 
+
 
     
 }
