@@ -4,7 +4,7 @@
 _Task Groupoff {
     void main();
   public:
-    Groupoff( unsigned int numStudents, unsigned int sodaCost, unsigned int groupoffDelay );
+    Groupoff( Printer &prt, unsigned int numStudents, unsigned int sodaCost, unsigned int groupoffDelay );
     WATCard::FWATCard giftCard();
 };
 
