@@ -3,6 +3,8 @@
 
 using namespace std;
 
+int xx = 0;   // hacky way to stop printer from printing infinite lines when I cause a deadlock accidentally
+
 TableCell::TableCell() : state(None) {}
 TableCell::TableCell( char state ) : state(state) {}
 TableCell::TableCell( char state, int param1 ) : state(state) {
@@ -80,7 +82,24 @@ void Printer::flushBuffer() {
         buffer.clear();
 }
 
+void Printer::sequentialPrint( const TableCell& cell, unsigned int index) {
+    // for debugging purposes only
+    for (unsigned int i = 0; i < index; i++) {
+        cout << '\t';
+    }
+    cout << cell << endl;
+}
 void Printer::bufferedPrint( const TableCell& cell, unsigned int index) {
+    // TODO DEBUG
+    xx++;
+    if (xx > 500) {
+        cerr << "HIT MAXIMUM OUTPUT LIMIT, EXITING" << endl;
+        exit(0);
+    }
+    /* sequentialPrint(cell, index); */
+    /* return; */
+    // TODO DEBUG
+
     if (cell.finish()) {
         flushBuffer();
         for (unsigned int i = 0; i < Kind::Student + numStudents + numVendingMachines + numCouriers; i++) {

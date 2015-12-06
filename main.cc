@@ -2,6 +2,9 @@
 #include <string>
 #include "config.h"
 #include "printer.h"
+#include "parent.h"
+#include "bank.h"
+#include "watcardoffice.h"
 #include "MPRNG.h"
 #include "nameserver.h"
 #include "vendingmachine.h"
@@ -53,8 +56,17 @@ void uMain::main() {
 
     // Read in the config file
     processConfigFile(config_file.c_str(), cparms);
-
-
+    cout << "DEBUG INFO" << endl;
+    cout << "sodaCost: " << cparms.sodaCost << endl;				
+    cout << "numStudents: " << cparms.numStudents << endl;		
+    cout << "maxPurchases: " << cparms.maxPurchases << endl;			
+    cout << "numVendingMachines: " << cparms.numVendingMachines << endl;	
+    cout << "maxStockPerFlavour: " << cparms.maxStockPerFlavour << endl;	
+    cout << "maxShippedPerFlavour: " << cparms.maxShippedPerFlavour << endl;	
+    cout << "timeBetweenShipments: " << cparms.timeBetweenShipments << endl;	
+    cout << "groupoffDelay: " << cparms.groupoffDelay << endl;			
+    cout << "parentalDelay: " << cparms.parentalDelay << endl;			
+    cout << "numCouriers: " << cparms.numCouriers << endl;			
     Printer printer(cparms.numStudents, cparms.numVendingMachines, cparms.numCouriers);
     NameServer nameServer(printer, cparms.numVendingMachines, cparms.numStudents);
 
@@ -66,22 +78,23 @@ void uMain::main() {
     BottlingPlant plant(printer, nameServer, cparms.numVendingMachines,
                         cparms.maxShippedPerFlavour, cparms.maxStockPerFlavour,
                         cparms.timeBetweenShipments);
+    Bank bank(cparms.numStudents);
+    Parent parent(printer, bank, cparms.numStudents, cparms.parentalDelay);
+    WATCardOffice office(printer, bank, cparms.numCouriers);
+    //TODO: Student
 
     yield(150);
-    cout << "FINISHED SLEEPING";
+    cout << "FINISHED SLEEPING" << endl;
+
+    /* MOCKED STUDENT BEHAVIOUR */
+    printer.print(Printer::Student, 0, TableCell::Start); 
+    WATCard::FWATCard fcard = office.create(0, 5);
+    WATCard *card = fcard();
+    printer.print(Printer::Student, 0, TableCell::CreateDone); 
+    cout << "Card Received with balance: " << card->getBalance() << endl;
+    delete card;
 
     for (unsigned int id = 0; id < cparms.numVendingMachines; id++)
         delete vendingmachine[id];
-
-    //TESTING, REMOVE THIS
-    /*
-    printer.print(Printer::Parent, TableCell::Start); 
-    printer.print(Printer::Groupoff, TableCell::TransferDone, 69); 
-    printer.print(Printer::Student, 1, TableCell::LostCard); 
-    printer.print(Printer::Courier, 0, TableCell::LostCard, 25, 99); 
-    printer.print(Printer::Courier, 0, TableCell::BoughtSoda, 25); 
-    printer.print(Printer::Parent, TableCell::Finish); 
-    */
-
 }
 // vim: set filetype=ucpp :

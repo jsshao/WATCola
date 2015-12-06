@@ -30,6 +30,7 @@ _Monitor Printer {
     unsigned int numStudents, numVendingMachines, numCouriers;
     unsigned int getIndex( Kind kind, unsigned int lid = 0);
     void bufferedPrint(const TableCell& cell, unsigned int index);
+    void sequentialPrint(const TableCell& cell, unsigned int index);
     void flushBuffer();
   public:
     Printer( unsigned int numStudents, unsigned int numVendingMachines, unsigned int numCouriers );
