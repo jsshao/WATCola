@@ -1,6 +1,5 @@
 #include "printer.h"
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
@@ -121,7 +120,7 @@ void Printer::print( Kind kind, char state, int value1 ) {
 
 void Printer::print( Kind kind, char state, int value1, int value2 ) {
     unsigned int index = getIndex(kind);
-    bufferedPrint(TableCell(state, value2), index);
+    bufferedPrint(TableCell(state, value1, value2), index);
 }
 
 void Printer::print( Kind kind, unsigned int lid, char state ) {
