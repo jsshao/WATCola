@@ -9,6 +9,8 @@
 #include "nameserver.h"
 #include "vendingmachine.h"
 #include "bottlingplant.h"
+#include "student.h"
+#include "groupoff.h"
 using namespace std;
 
 MPRNG rng;
@@ -81,10 +83,17 @@ void uMain::main() {
     Bank bank(cparms.numStudents);
     Parent parent(printer, bank, cparms.numStudents, cparms.parentalDelay);
     WATCardOffice office(printer, bank, cparms.numCouriers);
-    //TODO: Student
+    Groupoff group(printer, cparms.numStudents, cparms.sodaCost, cparms.groupoffDelay);
+
+    Student *students[cparms.numStudents];
+    for (unsigned int id = 0; id < cparms.numStudents; id++)
+        students[id] = new Student(printer, nameServer, office, group, id, cparms.maxPurchases);
 
     yield(150);
     cout << "FINISHED SLEEPING" << endl;
+
+    for (unsigned int id = 0; id < cparms.numStudents; id++)
+        delete students[id];
 
     /* MOCKED STUDENT BEHAVIOUR */
     printer.print(Printer::Student, 0, TableCell::Start); 
