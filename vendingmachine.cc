@@ -1,4 +1,6 @@
 #include "vendingmachine.h"
+#include <iostream>
+using namespace std;
 
 VendingMachine::VendingMachine( Printer &prt, NameServer &nameServer, unsigned int id, 
         unsigned int sodaCost, unsigned int maxStockPerFlavour ) : prt(prt), 
@@ -58,8 +60,7 @@ void VendingMachine::main() {
                 _Resume Stock() _At *student;
                 throwStock = false;
             }
-            
-            blockBuyer.signal();
+            blockBuyer.signalBlock();
         }
     }
     prt.print(Printer::Vending, id, TableCell::Finish);
