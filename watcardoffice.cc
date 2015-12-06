@@ -2,6 +2,9 @@
 #include "printer.h"
 #include "bank.h"
 #include "watcard.h"
+#include "MPRNG.h"
+
+extern MPRNG rng;
 
 WATCardOffice::WATCardOffice( Printer &prt, Bank &bank, unsigned int numCouriers ) : prt(&prt), bank(&bank), numCouriers(numCouriers) {
     for (unsigned int i = 0; i < numCouriers; i++) {
@@ -81,7 +84,12 @@ void WATCardOffice::Courier::main() {
                 card = new WATCard();
             }
             card->deposit(job->args.amount);
-            job->result.delivery(card);
+            if ( rng(5) == 0 ) { // 1 in 6 chance
+                delete card;
+                job->result.exception(new Lost);
+            } else {
+                job->result.delivery(card);
+            }
             delete job;
         } else {           // null job is the signal to stop
             break;

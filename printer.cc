@@ -92,7 +92,7 @@ void Printer::sequentialPrint( const TableCell& cell, unsigned int index) {
 void Printer::bufferedPrint( const TableCell& cell, unsigned int index) {
     // TODO DEBUG
     xx++;
-    if (xx > 9999) {
+    if (xx > 999) {
         cerr << "HIT MAXIMUM OUTPUT LIMIT, EXITING" << endl;
         exit(0);
     }

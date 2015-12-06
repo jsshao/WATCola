@@ -89,9 +89,6 @@ void uMain::main() {
     for (unsigned int id = 0; id < cparms.numStudents; id++)
         students[id] = new Student(printer, nameServer, office, group, id, cparms.maxPurchases);
 
-    yield(150);
-    cout << "FINISHED SLEEPING" << endl;
-
     for (unsigned int id = 0; id < cparms.numStudents; id++)
         delete students[id];
 
