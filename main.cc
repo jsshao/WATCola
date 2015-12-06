@@ -3,6 +3,9 @@
 #include "config.h"
 #include "printer.h"
 #include "MPRNG.h"
+#include "nameserver.h"
+#include "vendingmachine.h"
+#include "bottlingplant.h"
 using namespace std;
 
 MPRNG rng;
@@ -47,16 +50,38 @@ void uMain::main() {
 
     rng.seed(seed);
     ConfigParms cparms;
+
+    // Read in the config file
     processConfigFile(config_file.c_str(), cparms);
+
+
     Printer printer(cparms.numStudents, cparms.numVendingMachines, cparms.numCouriers);
+    NameServer nameServer(printer, cparms.numVendingMachines, cparms.numStudents);
+
+    VendingMachine *vendingmachine[cparms.numVendingMachines];
+    for (unsigned int id = 0; id < cparms.numVendingMachines; id++)
+        vendingmachine[id] = new VendingMachine(printer, nameServer, id, cparms.sodaCost, 
+                                               cparms.maxStockPerFlavour);
+
+    BottlingPlant plant(printer, nameServer, cparms.numVendingMachines,
+                        cparms.maxShippedPerFlavour, cparms.maxStockPerFlavour,
+                        cparms.timeBetweenShipments);
+
+    yield(150);
+    cout << "FINISHED SLEEPING";
+
+    for (unsigned int id = 0; id < cparms.numVendingMachines; id++)
+        delete vendingmachine[id];
+
+    //TESTING, REMOVE THIS
+    /*
     printer.print(Printer::Parent, TableCell::Start); 
     printer.print(Printer::Groupoff, TableCell::TransferDone, 69); 
     printer.print(Printer::Student, 1, TableCell::LostCard); 
     printer.print(Printer::Courier, 0, TableCell::LostCard, 25, 99); 
     printer.print(Printer::Courier, 0, TableCell::BoughtSoda, 25); 
     printer.print(Printer::Parent, TableCell::Finish); 
+    */
 
-
-    
 }
 // vim: set filetype=ucpp :
