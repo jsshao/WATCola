@@ -61,7 +61,8 @@ void WATCardOffice::main() {
 
         } or _When(jobs.size()) _Accept (requestWork) {
             prt->print(Printer::WATCardOffice, TableCell::RequestWorkDone);
-        }     }
+        }     
+    }
     prt->print(Printer::WATCardOffice, TableCell::Finish);
 }
 

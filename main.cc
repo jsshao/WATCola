@@ -96,15 +96,22 @@ void uMain::main() {
         delete students[id];
 
     /* MOCKED STUDENT BEHAVIOUR */
-    printer.print(Printer::Student, 0, TableCell::Start); 
-    WATCard::FWATCard fcard = office.create(0, 5);
-    WATCard *card = fcard();
-    printer.print(Printer::Student, 0, TableCell::CreateDone); 
-    cout << "Card Received with balance: " << card->getBalance() << endl;
-    fcard = office.transfer(0, 4, card);
-    card = fcard();
-    cout << "Card updated with new balance: " << card->getBalance() << endl;
-    delete card;
+    /* printer.print(Printer::Student, 0, TableCell::Start); */ 
+    /* WATCard::FWATCard fcard = office.create(0, 5); */
+    /* WATCard *card = fcard(); */
+    /* printer.print(Printer::Student, 0, TableCell::CreateDone); */ 
+    /* cout << "Card Received with balance: " << card->getBalance() << endl; */
+    /* fcard = office.transfer(0, 4, card); */
+    /* card = fcard(); */
+    /* cout << "Card updated with new balance: " << card->getBalance() << endl; */
+    /* delete card; */
+    
+    /* fcard = group.giftCard(); */
+    /* card = fcard(); */
+    /* printer.print(Printer::Student, 0, TableCell::CreateDone); */ 
+    /* cout << "Giftcard Received with balance: " << card->getBalance() << endl; */
+
+        
 
     for (unsigned int id = 0; id < cparms.numVendingMachines; id++)
         delete vendingmachine[id];
