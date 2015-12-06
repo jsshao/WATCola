@@ -1,5 +1,6 @@
 #include "student.h"
 #include <iostream>
+using namespace std;
 
 Student::Student( Printer &prt, NameServer &nameServer, WATCardOffice &cardOffice, 
         Groupoff &groupoff, unsigned int id, unsigned int maxPurchases ): 
@@ -21,38 +22,41 @@ void Student::main() {
     for (unsigned int i = 0; i < numOfPurch; i++) {
         yield(rng(1, 10));
         for (;;) {
-            try {
-                _Select (watCard) {
-                    try {
-                        _Enable {
-                            loc->buy(favFlavour, *watCard);
-                            prt.print(Printer::Student, id, TableCell::BoughtSoda, (*watCard).getBalance());
-                            break;
-                        }
-                    } catch (VendingMachine::Funds &e) {
-                        watCard = office.transfer(id, INITIAL_VALUE + loc->cost(), watCard);
-                    } catch (VendingMachine::Stock &e) {
-                        loc = nameServer.getMachine(id);
-                        prt.print(Printer::Student, id, TableCell::SelectVM, loc->getId());
-                    }
-                } or _Select(giftCard) {
-                    try {
-                        _Enable {
-                            loc->buy(favFlavour, *giftCard);
-                            prt.print(Printer::Student, id, TableCell::GiftedSoda, (*giftCard).getBalance());
-                            giftCard.reset();
-                            break;
-                        }
-                    } catch (VendingMachine::Stock &e) {
-                        loc = nameServer.getMachine(id);
-                        prt.print(Printer::Student, id, TableCell::SelectVM, loc->getId());
-                    }
-                }
-            } catch (WATCardOffice::Lost &e) {
-                prt.print(Printer::Student, id, TableCell::LostCard);
+            _Select (watCard) {
+                try {
+                    watCard();
+                } catch (WATCardOffice::Lost &e) {
+                    prt.print(Printer::Student, id, TableCell::LostCard);
 
-                // Create new watcard
-                watCard = office.create(id, INITIAL_VALUE);
+                    // Create new watcard
+                    watCard = office.create(id, INITIAL_VALUE);
+                    continue;
+                }
+
+                try {
+                    _Enable {
+                        loc->buy(favFlavour, *watCard);
+                        prt.print(Printer::Student, id, TableCell::BoughtSoda, (*watCard).getBalance());
+                        break;
+                    }
+                } catch (VendingMachine::Funds &e) {
+                    watCard = office.transfer(id, INITIAL_VALUE + loc->cost(), watCard);
+                } catch (VendingMachine::Stock &e) {
+                    loc = nameServer.getMachine(id);
+                    prt.print(Printer::Student, id, TableCell::SelectVM, loc->getId());
+                }
+            } or _Select(giftCard) {
+                try {
+                    _Enable {
+                        loc->buy(favFlavour, *giftCard);
+                        prt.print(Printer::Student, id, TableCell::GiftedSoda, (*giftCard).getBalance());
+                        giftCard.reset();
+                        break;
+                    }
+                } catch (VendingMachine::Stock &e) {
+                    loc = nameServer.getMachine(id);
+                    prt.print(Printer::Student, id, TableCell::SelectVM, loc->getId());
+                }
             }
         }
     }
