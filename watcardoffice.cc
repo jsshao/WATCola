@@ -3,6 +3,8 @@
 #include "bank.h"
 #include "watcard.h"
 #include "MPRNG.h"
+#include <iostream>
+using namespace std;
 
 extern MPRNG rng;
 
@@ -48,12 +50,18 @@ void WATCardOffice::main() {
     prt->print(Printer::WATCardOffice, TableCell::Start);
     for (;;) {
         _Accept(~WATCardOffice) {
+            // empty the job queue
+            while (jobs.size()) {
+                Job *job = jobs.front();
+                delete job;
+                jobs.pop();
+            }
+        
+            // replace the jobs with NULL jobs, signifying termination
             for (unsigned int i = 0; i < numCouriers; i++) {
                 jobs.push(NULL);            // null job signals to couriers to stop
             }
-            while (jobs.size()) {
-                _Accept(requestWork);       // wait for all existing jobs to be run
-            }
+            _Accept(requestWork);       // let couriers receive NULL job
             break;
         } or _Accept( create ) {
             Job *job = jobs.back();
