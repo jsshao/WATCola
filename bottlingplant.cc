@@ -17,8 +17,9 @@ BottlingPlant::~BottlingPlant() {
 
 void BottlingPlant::getShipment( unsigned int cargo[] ) {
     if (shuttingDown) {
-        uRendezvousAcceptor();
-        _Throw Shutdown();
+        callerTruck = &uThisCoroutine();
+        shutdownCond.wait();
+        return;
     }
 
     // Deliver shipment to truck
@@ -48,6 +49,8 @@ void BottlingPlant::main() {
         }
         or _Accept(getShipment) {
             if (shuttingDown) {
+                _Resume Shutdown() _At *callerTruck;
+                shutdownCond.signal();
                 break;
             }
 

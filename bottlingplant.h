@@ -20,6 +20,8 @@ _Task BottlingPlant {
     Truck *truck;
     bool shuttingDown;
     unsigned int inventory[VendingMachine::Flavours::No_Of_Flavours];
+    uCondition shutdownCond;
+    uBaseCoroutine *callerTruck;
   public:
     _Event Shutdown {};                    // shutdown plant
     BottlingPlant( Printer &prt, NameServer &nameServer, unsigned int numVendingMachines,

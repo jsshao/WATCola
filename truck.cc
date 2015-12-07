@@ -16,11 +16,13 @@ void Truck::main() {
 
     for (;;) {
         try {
-            // Get coffee from Tim Hortons
-            yield(rng(1, 10));
+            _Enable {
+                // Get coffee from Tim Hortons
+                yield(rng(1, 10));
 
-            // Ignore existing cargo by letting the plant overwrite them
-            plant.getShipment(cargo);
+                // Ignore existing cargo by letting the plant overwrite them
+                plant.getShipment(cargo);
+            }
         } catch (BottlingPlant::Shutdown &e) {
             break;
         }
