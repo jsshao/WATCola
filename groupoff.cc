@@ -2,6 +2,8 @@
 #include "watcard.h"
 #include "MPRNG.h"
 #include <algorithm>
+#include <iostream>
+using namespace std;
 
 using namespace std;
 extern MPRNG rng;
