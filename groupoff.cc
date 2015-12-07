@@ -5,7 +5,14 @@
 
 using namespace std;
 extern MPRNG rng;
+
 Groupoff::Groupoff( Printer &prt, unsigned int numStudents, unsigned int sodaCost, unsigned int groupoffDelay ) : prt(&prt), numStudents(numStudents), sodaCost(sodaCost), groupoffDelay(groupoffDelay) {}
+
+Groupoff::~Groupoff() {
+    for (unsigned int i = 0; i < issued_cards.size(); i++) {
+        delete issued_cards[i];
+    }
+}
 
 WATCard::FWATCard Groupoff::giftCard() {
     futures.push_back(WATCard::FWATCard());
@@ -31,6 +38,7 @@ void Groupoff::main() {
             }
             fcard = futures.back();
             futures.pop_back();                         
+            issued_cards.push_back(card);
             fcard.delivery(card);
             prt->print(Printer::Groupoff, TableCell::Deposit, sodaCost);
         } 

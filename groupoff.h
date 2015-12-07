@@ -9,9 +9,11 @@ _Task Groupoff {
     Printer *prt;
     unsigned int numStudents, sodaCost, groupoffDelay;
     std::vector<WATCard::FWATCard> futures;
+    std::vector<WATCard*> issued_cards;
   public:
     Groupoff( Printer &prt, unsigned int numStudents, unsigned int sodaCost, unsigned int groupoffDelay );
     WATCard::FWATCard giftCard();
+    ~Groupoff();
 };
 
 #endif
