@@ -1,12 +1,15 @@
 #ifndef BANK_H
 #define BANK_H
-#include <map>
+#include <vector>
 
 _Monitor Bank {
     unsigned int numStudents;
-    std::map<unsigned int, unsigned int> accounts;
+    std::vector<uCondition*> conds;
+    std::vector<unsigned int> accounts;
+    std::vector<unsigned int> desired;
   public:
     Bank( unsigned int numStudents );
+    ~Bank();
     void deposit( unsigned int id, unsigned int amount );
     void withdraw( unsigned int id, unsigned int amount );
 };
