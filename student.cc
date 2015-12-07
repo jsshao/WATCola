@@ -13,6 +13,7 @@ void Student::main() {
 
     WATCard::FWATCard watCard = office.create(id, INITIAL_VALUE);
     WATCard::FWATCard giftCard = group.giftCard();
+    WATCard *card = NULL;
     VendingMachine *loc = nameServer.getMachine(id);
     prt.print(Printer::Student, id, TableCell::SelectVM, loc->getId());
 
@@ -33,12 +34,13 @@ void Student::main() {
 
                 try {
                     _Enable {
-                        loc->buy(favFlavour, *watCard);
-                        prt.print(Printer::Student, id, TableCell::BoughtSoda, (*watCard).getBalance());
+                        card = watCard();
+                        loc->buy(favFlavour, *card);
+                        prt.print(Printer::Student, id, TableCell::BoughtSoda, card->getBalance());
                         break;
                     }
                 } catch (VendingMachine::Funds &e) {
-                    watCard = office.transfer(id, INITIAL_VALUE + loc->cost(), watCard);
+                    watCard = office.transfer(id, INITIAL_VALUE + loc->cost(), card);
                 } catch (VendingMachine::Stock &e) {
                     loc = nameServer.getMachine(id);
                     prt.print(Printer::Student, id, TableCell::SelectVM, loc->getId());
@@ -48,6 +50,7 @@ void Student::main() {
                     _Enable {
                         loc->buy(favFlavour, *giftCard);
                         prt.print(Printer::Student, id, TableCell::GiftedSoda, (*giftCard).getBalance());
+                        delete giftCard;
                         giftCard.reset();
                         break;
                     }
@@ -58,6 +61,8 @@ void Student::main() {
             }
         }
     }
-
+    if (card) { 
+        delete card;
+    }
     prt.print(Printer::Student, id, TableCell::Finish);
 }

@@ -15,10 +15,10 @@ void Truck::main() {
     prt.print(Printer::Truck, TableCell::Start);
 
     for (;;) {
-        // Get coffee from Tim Hortons
-        yield(rng(1, 10));
-
         try {
+            // Get coffee from Tim Hortons
+            yield(rng(1, 10));
+
             // Ignore existing cargo by letting the plant overwrite them
             plant.getShipment(cargo);
         } catch (BottlingPlant::Shutdown &e) {

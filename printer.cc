@@ -96,8 +96,8 @@ void Printer::bufferedPrint( const TableCell& cell, unsigned int index) {
         cerr << "HIT MAXIMUM OUTPUT LIMIT, EXITING" << endl;
         exit(0);
     }
-    /* sequentialPrint(cell, index); */
-    /* return; */
+    sequentialPrint(cell, index);
+    return;
     // TODO DEBUG
 
     if (cell.finish()) {

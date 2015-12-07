@@ -16,8 +16,10 @@ BottlingPlant::~BottlingPlant() {
 }
 
 void BottlingPlant::getShipment( unsigned int cargo[] ) {
-    if (shuttingDown)
-        return;
+    if (shuttingDown) {
+        uRendezvousAcceptor();
+        _Throw Shutdown();
+    }
 
     // Deliver shipment to truck
     for (int i = 0; i < VendingMachine::Flavours::No_Of_Flavours; i++)
@@ -41,11 +43,11 @@ void BottlingPlant::main() {
     stockUp();
 
     for (;;) {
-        _Accept(~BottlingPlant)
+        _Accept(~BottlingPlant) {
             shuttingDown = true;
+        }
         or _Accept(getShipment) {
             if (shuttingDown) {
-                _Resume Shutdown() _At truck;
                 break;
             }
 

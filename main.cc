@@ -77,40 +77,25 @@ void uMain::main() {
         vendingmachine[id] = new VendingMachine(printer, nameServer, id, cparms.sodaCost, 
                                                cparms.maxStockPerFlavour);
 
-    BottlingPlant plant(printer, nameServer, cparms.numVendingMachines,
-                        cparms.maxShippedPerFlavour, cparms.maxStockPerFlavour,
-                        cparms.timeBetweenShipments);
-    Bank bank(cparms.numStudents);
-    Parent parent(printer, bank, cparms.numStudents, cparms.parentalDelay);
-    WATCardOffice office(printer, bank, cparms.numCouriers);
-    Groupoff group(printer, cparms.numStudents, cparms.sodaCost, cparms.groupoffDelay);
+    {
+        BottlingPlant plant(printer, nameServer, cparms.numVendingMachines,
+                cparms.maxShippedPerFlavour, cparms.maxStockPerFlavour,
+                cparms.timeBetweenShipments);
+        Bank bank(cparms.numStudents);
+        Parent parent(printer, bank, cparms.numStudents, cparms.parentalDelay);
+        WATCardOffice office(printer, bank, cparms.numCouriers);
+        Groupoff group(printer, cparms.numStudents, cparms.sodaCost, cparms.groupoffDelay);
 
-    Student *students[cparms.numStudents];
-    for (unsigned int id = 0; id < cparms.numStudents; id++)
-        students[id] = new Student(printer, nameServer, office, group, id, cparms.maxPurchases);
+        Student *students[cparms.numStudents];
+        for (unsigned int id = 0; id < cparms.numStudents; id++)
+            students[id] = new Student(printer, nameServer, office, group, id, cparms.maxPurchases);
 
-    for (unsigned int id = 0; id < cparms.numStudents; id++)
-        delete students[id];
+        for (unsigned int id = 0; id < cparms.numStudents; id++)
+            delete students[id];
+    }    
 
-    /* MOCKED STUDENT BEHAVIOUR */
-    /* printer.print(Printer::Student, 0, TableCell::Start); */ 
-    /* WATCard::FWATCard fcard = office.create(0, 5); */
-    /* WATCard *card = fcard(); */
-    /* printer.print(Printer::Student, 0, TableCell::CreateDone); */ 
-    /* cout << "Card Received with balance: " << card->getBalance() << endl; */
-    /* fcard = office.transfer(0, 4, card); */
-    /* card = fcard(); */
-    /* cout << "Card updated with new balance: " << card->getBalance() << endl; */
-    /* delete card; */
-    
-    /* fcard = group.giftCard(); */
-    /* card = fcard(); */
-    /* printer.print(Printer::Student, 0, TableCell::CreateDone); */ 
-    /* cout << "Giftcard Received with balance: " << card->getBalance() << endl; */
-
-        
-
-    for (unsigned int id = 0; id < cparms.numVendingMachines; id++)
+    for (unsigned int id = 0; id < cparms.numVendingMachines; id++) {
         delete vendingmachine[id];
+    }
 }
 // vim: set filetype=ucpp :
